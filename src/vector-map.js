@@ -45,7 +45,6 @@ function drawPoints() {
 }
 
 function drawLines() {
-	stroke(255);
 	strokeWeight(2);
 
 	for (let i = 0; i < points.length; i++) {
@@ -55,9 +54,24 @@ function drawLines() {
 
 			if (point1 == point2) continue;
 
+			stroke(255, 255, 255, (255 - distanceTo(point1, point2)) / 2);
 			line(point1.x, point1.y, point2.x, point2.y);
 		}
 	}
 
 	noStroke();
+}
+
+//
+// util: util
+//
+
+function distanceTo(point1, point2) {
+	let x1 = point1.x; let y1 = point1.y;
+	let x2 = point2.x; let y2 = point2.y;
+
+	let a = x1 - x2;
+	let b = y1 - y2;
+
+	return Math.sqrt(a*a + b*b);
 }
