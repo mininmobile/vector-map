@@ -29,3 +29,22 @@ function draw() {
 	// cursor
 	ellipse(mouseX, mouseY, 20);
 }
+
+function mouseClicked() {
+	if (mouseButton == LEFT) {
+		points.push({
+			x: mouseX,
+			y: mouseY
+		});
+	}
+}
+
+//
+// util
+//
+
+function drawPoints() {
+	points.forEach((point) => {
+		ellipse(point.x, point.y, 20);
+	});
+}
