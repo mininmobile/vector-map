@@ -7,10 +7,7 @@ let mouse = { x: 0, y: 0 }
 let width = document.body.clientWidth;
 let height = document.body.clientHeight;
 
-let c = document.createElement("canvas");
-document.body.appendChild(c);
-c.width = width;
-c.height = height;
+let c = document.getElementById("canvas");
 
 addEventListener("resize", () => {
 	width = document.body.clientWidth;
@@ -73,9 +70,9 @@ document.addEventListener("click", (e) => {
 	}
 });
 
-document.addEventListener("mousemove", (e) => {
-	mouse.x = e.x;
-	mouse.y = e.y;
+c.addEventListener("mousemove", (e) => {
+	mouse.x = e.offsetX;
+	mouse.y = e.offsetY;
 });
 
 // util
