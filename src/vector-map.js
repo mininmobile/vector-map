@@ -1,70 +1,84 @@
 let points = [
 	{ x: 0, y: 0 },
-	{ x: 100, y: 100 },
-	{ x: 245, y: 214 },
-	{ x: 312, y: 412 },
-	{ x: 432, y: 123 }
-];
+]
 
-function setup() {
-	createCanvas(800, 600);
+let mouse = { x: 0, y: 0 }
 
-	fill(255);
-	noStroke(0);
-}
+let width = document.body.clientWidth;
+let height = document.body.clientHeight;
 
-function draw() {
-	background("#1c1c1c");
+let c = document.createElement("canvas");
+document.body.appendChild(c);
+c.width = width;
+c.height = height;
+
+addEventListener("resize", () => {
+	width = document.body.clientWidth;
+	height = document.body.clientHeight;
+	
+	c.width = width;
+	c.height = height;
+});
+
+let ctx = c.getContext("2d");
+ctx.lineWidth = 2;
+ctx.font = "1em Arial";
+
+
+(function render() {
+	requestAnimationFrame(render);
+
+	ctx.fillStyle = "#1c1c1c";
+	ctx.fillRect(0, 0, width, height);
 
 	// cursor
-	points[0].x = mouseX;
-	points[0].y = mouseY;
+	points[0].x = mouse.x;
+	points[0].y = mouse.y;
 
 	// map
-	drawPoints();
-	drawLines();
-}
-
-function mouseClicked() {
-	if (mouseButton == LEFT) {
-		points.push({
-			x: points[0].x,
-			y: points[0].y
-		});
-	}
-}
-
-//
-// util: draw
-//
-
-function drawPoints() {
-	points.forEach((point) => {
-		ellipse(point.x, point.y, 20);
-	});
-}
-
-function drawLines() {
-	strokeWeight(2);
-
 	for (let i = 0; i < points.length; i++) {
 		let point1 = points[i];
+		
 		for (let j = 0; j < points.length; j++) {
 			let point2 = points[j];
 
 			if (point1 == point2) continue;
 
-			stroke(255, 255, 255, (255 - distanceTo(point1, point2)) / 2);
-			line(point1.x, point1.y, point2.x, point2.y);
+			let d = distanceTo(point1, point2);
+
+			if (255 - d <= 0) continue;
+
+			ctx.strokeStyle = `rgba(255, 255, 255, ${(255 - d) / 255})`;
+			ctx.beginPath();
+			ctx.moveTo(point1.x, point1.y);
+			ctx.lineTo(point2.x, point2.y);
+			ctx.stroke();
 		}
 	}
 
-	noStroke();
-}
+	ctx.fillStyle = "#ddd";
+	points.forEach((point) => {
+		ctx.beginPath();
+		ctx.ellipse(point.x, point.y, 10, 10, 0, 0, Math.PI * 2);
+		ctx.fill();
+	});
+})();
 
-//
-// util: util
-//
+document.addEventListener("click", (e) => {
+	if (e.button == 0) {
+		points.push({
+			x: points[0].x,
+			y: points[0].y
+		});
+	}
+});
+
+document.addEventListener("mousemove", (e) => {
+	mouse.x = e.x;
+	mouse.y = e.y;
+});
+
+// util
 
 function distanceTo(point1, point2) {
 	let x1 = point1.x; let y1 = point1.y;
