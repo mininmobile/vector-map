@@ -7,14 +7,46 @@ let paths = [
 			{ x: 0, y: 1 },
 			{ x: 1, y: -1 },
 		]
-	}
+	},
+	{
+		name: "Square",
+		distance: 5,
+		points: [
+			{ x: 3, y: 3 },
+			{ x: 6, y: 3 },
+			{ x: 6, y: 6 },
+			{ x: 3, y: 6 },
+		]
+	},
+	{
+		name: "Polygon",
+		distance: 2,
+		points: [
+			{ x: -3, y: -4 },
+			{ x: -4, y: -3 },
+			{ x: -5, y: -4 },
+			{ x: -5, y: -5 },
+			{ x: -3, y: -5 },
+			{ x: -4, y: -6 },
+		]
+	},
 ]
 
 let grid = { shown: true, size: 50 }
 
 let mouse = { hover: false, x: 0, y: 0 }
 
-let selected = "Triangle";
+let selected = {
+	// -1 deselected
+	//  0 path
+	//  1 point
+	type: -1,
+	index: undefined,
+}
+
+// get ui elements
+let list = document.getElementById("list");
+let prop = document.getElementById("properties");
 
 // create canvas
 let cp = document.getElementById("placeholder");
@@ -105,6 +137,9 @@ ctx.font = "1em sans-serif";
 
 				let d = distanceTo(point1, point2);
 
+				if (d > path.distance)
+					continue;
+
 				let x1 = cp.clientWidth / 2 + point1.x * grid.size;
 				let y1 = cp.clientHeight / 2 - point1.y * grid.size;
 				let x2 = cp.clientWidth / 2 + point2.x * grid.size;
@@ -154,18 +189,54 @@ ctx.font = "1em sans-serif";
 	}
 })();
 
-// mouse controls
+// ui
+{ // list
+	{ // init
+		generateList();
+	}
 
+	function generateList() {
+		list.innerHTML = "";
+
+		paths.forEach((path) => {
+			let container = document.createElement("div");
+				container.classList.add("container");
+				list.appendChild(container);
+
+			let name = document.createElement("div");
+				name.innerText = path.name;
+				name.classList.add("name");
+				container.appendChild(name);
+
+			let pointContainer = document.createElement("div");
+				pointContainer.classList.add("point-container");
+				container.appendChild(pointContainer);
+
+			path.points.forEach((point) => {
+				let pointElement = document.createElement("div");
+					pointElement.innerText = `(${point.x}, ${point.y})`;
+					pointElement.classList.add("point");
+					pointContainer.appendChild(pointElement);
+			});
+		});
+	}
+}
+
+// mouse controls
 document.addEventListener("click", (e) => {
 	if (e.button == 0) {
-		if (paths.get(selected)) {
-			let x = Math.round(mouse.x / grid.size) * grid.size;
-			let y = Math.round(mouse.y / grid.size) * grid.size;
+		if (selected.type == 0) {
+			let path = paths.filter(x => x.name == selected.index)[0];
 
-			paths.get(selected).push({
-				x: Math.round((x - cp.clientWidth / 2) / grid.size) + 1,
-				y: Math.round((cp.clientHeight / 2 - y) / grid.size),
-			});
+			if (path) {
+				let x = Math.round(mouse.x / grid.size) * grid.size;
+				let y = Math.round(mouse.y / grid.size) * grid.size;
+
+				path.points.push({
+					x: Math.round((x - cp.clientWidth / 2) / grid.size) + 1,
+					y: Math.round((cp.clientHeight / 2 - y) / grid.size),
+				});
+			}
 		}
 	}
 });
