@@ -2,41 +2,48 @@ let points = [
 	{ x: 0, y: 0 },
 ]
 
-let mouse = { x: 0, y: 0 }
+let mouse = { hover: false, x: 0, y: 0 }
 
-let width = document.body.clientWidth;
-let height = document.body.clientHeight;
+// create canvas
+let cp = document.getElementById("placeholder");
 
-let c = document.getElementById("canvas");
+let c = document.createElement("canvas");
+document.body.appendChild(c);
 
 addEventListener("resize", () => {
-	width = document.body.clientWidth;
-	height = document.body.clientHeight;
-	
-	c.width = width;
-	c.height = height;
+	c.width = cp.clientWidth;
+	c.height = cp.clientHeight;
+	c.style.top = cp.offsetTop + "px";
+	c.style.left = cp.offsetLeft + "px";
 });
 
+addEventListener("load", () => {
+	c.width = cp.clientWidth;
+	c.height = cp.clientHeight;
+	c.style.top = cp.offsetTop + "px";
+	c.style.left = cp.offsetLeft + "px";
+});
+
+// create context
 let ctx = c.getContext("2d");
 ctx.lineWidth = 2;
 ctx.font = "1em Arial";
-
 
 (function render() {
 	requestAnimationFrame(render);
 
 	ctx.fillStyle = "#1c1c1c";
-	ctx.fillRect(0, 0, width, height);
+	ctx.fillRect(0, 0, cp.clientWidth, cp.clientHeight);
 
 	// cursor
 	points[0].x = mouse.x;
 	points[0].y = mouse.y;
 
 	// map
-	for (let i = 0; i < points.length; i++) {
+	for (let i = mouse.hover ? 0 : 1; i < points.length; i++) {
 		let point1 = points[i];
 		
-		for (let j = 0; j < points.length; j++) {
+		for (let j = mouse.hover ? 0 : 1; j < points.length; j++) {
 			let point2 = points[j];
 
 			if (point1 == point2) continue;
@@ -53,13 +60,17 @@ ctx.font = "1em Arial";
 		}
 	}
 
-	ctx.fillStyle = "#ddd";
-	points.forEach((point) => {
+	ctx.fillStyle = "#fff";
+	for (let i = mouse.hover ? 0 : 1; i < points.length; i++) {
+		let point = points[i];
+
 		ctx.beginPath();
 		ctx.ellipse(point.x, point.y, 10, 10, 0, 0, Math.PI * 2);
 		ctx.fill();
-	});
+	}
 })();
+
+// mouse controls
 
 document.addEventListener("click", (e) => {
 	if (e.button == 0) {
@@ -74,6 +85,9 @@ c.addEventListener("mousemove", (e) => {
 	mouse.x = e.offsetX;
 	mouse.y = e.offsetY;
 });
+
+c.addEventListener("mouseenter", () => mouse.hover = true);
+c.addEventListener("mouseleave", () => mouse.hover = false);
 
 // util
 

@@ -11,6 +11,11 @@ body, html {
 	overflow: hidden;
 }
 
+canvas {
+	position: absolute;
+	z-index: 9;
+}
+
 /* ui */
 
 .menu {
@@ -25,7 +30,7 @@ body, html {
 }
 
 .menu .item:hover {
-	background: rgba(0, 0, 0, 0.2);
+	background: rgba(0, 0, 0, 0.5);
 }
 
 /* layout */
@@ -47,4 +52,9 @@ body, html {
 .wrapper.columns .properties {
 	width: 240px;
 	height: 100%;
+}
+
+.wrapper.columns .placeholder {
+	flex: 1;
+	background: #1c1c1c;
 }
