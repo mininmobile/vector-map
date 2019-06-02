@@ -8,7 +8,6 @@ body, html {
 	display: flex;
 	font-family: sans-serif;
 	font-size: 1em;
-	overflow: hidden;
 }
 
 canvas {
@@ -17,9 +16,10 @@ canvas {
 	cursor: none;
 }
 
-/* ui */
+/* menubar */
 
 .menu {
+	height: 2em;
 	padding-left: 0.5em;
 	display: flex;
 }
@@ -31,7 +31,45 @@ canvas {
 }
 
 .menu .item:hover {
-	background: rgba(0, 0, 0, 0.3);
+	background: rgba(255, 255, 255, 0.05);
+}
+
+/* list */
+
+.list .container {
+	padding-right: 0.5em;
+	border-bottom: 1px solid #333;
+	cursor: default;
+	-webkit-user-select: none;
+	        user-select: none;
+}
+
+.list .container:last-child {
+	border-bottom: none;
+}
+
+.list .container .name {
+	margin-left: 0.5em;
+	margin-top: 0.5em;
+	padding: 0.5em;
+	transition: background 0.2s;
+}
+
+.list .point-container {
+	margin-left: 1.5em;
+	margin-bottom: 0.5em;
+}
+
+.list .container .point {
+	padding: 0.5em;
+	font-family: monospace;
+	transition: background 0.2s;
+}
+
+.list .container .name:hover,
+.list .container .point:hover,
+.list .container .selected {
+	background: rgba(255, 255, 255, 0.05);
 }
 
 /* layout */
@@ -45,14 +83,11 @@ canvas {
 	flex-direction: column;
 }
 
-.wrapper.columns {
-	justify-content: space-between
-}
-
 .wrapper.columns .list,
 .wrapper.columns .properties {
 	width: 240px;
-	height: 100%;
+	height: calc(100vh - 2em);
+	overflow: auto;
 }
 
 .wrapper.columns .placeholder {

@@ -206,7 +206,22 @@ ctx.font = "1em sans-serif";
 			let name = document.createElement("div");
 				name.innerText = path.name;
 				name.classList.add("name");
+				name.addEventListener("click", () => {
+					if (selected.type == 0 && selected.index == path.name) {
+						selected.type = -1;
+						selected.index = undefined;
+					} else {
+						selected.type = 0;
+						selected.index = path.name;
+					}
+
+					generateList();
+				});
 				container.appendChild(name);
+
+			if (selected.type == 0 && selected.index == path.name) {
+				name.classList.add("selected");
+			}
 
 			let pointContainer = document.createElement("div");
 				pointContainer.classList.add("point-container");
@@ -223,7 +238,7 @@ ctx.font = "1em sans-serif";
 }
 
 // mouse controls
-document.addEventListener("click", (e) => {
+c.addEventListener("click", (e) => {
 	if (e.button == 0) {
 		if (selected.type == 0) {
 			let path = paths.filter(x => x.name == selected.index)[0];
@@ -236,6 +251,8 @@ document.addEventListener("click", (e) => {
 					x: Math.round((x - cp.clientWidth / 2) / grid.size) + 1,
 					y: Math.round((cp.clientHeight / 2 - y) / grid.size),
 				});
+
+				generateList();
 			}
 		}
 	}
