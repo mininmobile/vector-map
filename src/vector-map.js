@@ -1,16 +1,20 @@
-let objects = new Map([
-	["x", [
-		{ x: -1, y: -1 },
-		{ x: 0, y: 1 },
-		{ x: 1, y: -1 },
-	]]
-]);
+let paths = [
+	{
+		name: "Triangle",
+		distance: 5,
+		points: [
+			{ x: -1, y: -1 },
+			{ x: 0, y: 1 },
+			{ x: 1, y: -1 },
+		]
+	}
+]
 
 let grid = { shown: true, size: 50 }
 
 let mouse = { hover: false, x: 0, y: 0 }
 
-let selected = undefined;
+let selected = "Triangle";
 
 // create canvas
 let cp = document.getElementById("placeholder");
@@ -87,8 +91,38 @@ ctx.font = "1em sans-serif";
 	}
 
 	// map
+	paths.forEach((path) => {
+		let points = path.points;
+
+		for (let i = 0; i < points.length; i++) {
+			let point1 = points[i];
+
+			for (let j = 0; j < points.length; j++) {
+				let point2 = points[j];
+
+				if (point1 == point2)
+					continue;
+
+				let d = distanceTo(point1, point2);
+
+				let x1 = cp.clientWidth / 2 + point1.x * grid.size;
+				let y1 = cp.clientHeight / 2 - point1.y * grid.size;
+				let x2 = cp.clientWidth / 2 + point2.x * grid.size;
+				let y2 = cp.clientHeight / 2 - point2.y * grid.size;
+
+				ctx.strokeStyle = `rgba(255, 255, 255, ${(path.distance - d) / path.distance})`;
+				ctx.beginPath();
+				ctx.moveTo(x1, y1);
+				ctx.lineTo(x2, y2);
+				ctx.stroke();
+			}
+		}
+	});
+
 	ctx.fillStyle = "#fff";
-	objects.forEach((points) => {
+	paths.forEach((path) => {
+		let points = path.points;
+
 		for (let i = 0; i < points.length; i++) {
 			let point = points[i];
 
@@ -102,6 +136,7 @@ ctx.font = "1em sans-serif";
 	});
 
 	// cursor
+	ctx.fillStyle = "#fff";
 	if (mouse.hover) {
 		let x = Math.round(mouse.x / grid.size) * grid.size;
 		let y = Math.round(mouse.y / grid.size) * grid.size;
@@ -113,7 +148,7 @@ ctx.font = "1em sans-serif";
 		ctx.ellipse(x + offsetx, y + offsety, 10, 10, 0, 0, Math.PI * 2);
 		ctx.fill();
 
-		ctx.fillText(`(${Math.round((x - cp.clientWidth / 2) / grid.size)}, ` +
+		ctx.fillText(`(${Math.round((x - cp.clientWidth / 2) / grid.size) + 1}, ` +
 					  `${Math.round((cp.clientHeight / 2 - y) / grid.size)})`,
 					  x + offsetx + 8, y + offsety - 16);
 	}
@@ -123,10 +158,15 @@ ctx.font = "1em sans-serif";
 
 document.addEventListener("click", (e) => {
 	if (e.button == 0) {
-		points.push({
-			x: points[0].x,
-			y: points[0].y
-		});
+		if (paths.get(selected)) {
+			let x = Math.round(mouse.x / grid.size) * grid.size;
+			let y = Math.round(mouse.y / grid.size) * grid.size;
+
+			paths.get(selected).push({
+				x: Math.round((x - cp.clientWidth / 2) / grid.size) + 1,
+				y: Math.round((cp.clientHeight / 2 - y) / grid.size),
+			});
+		}
 	}
 });
 
