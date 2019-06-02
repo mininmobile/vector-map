@@ -1,6 +1,12 @@
-let objects = new Map();
+let objects = new Map([
+	["x", [
+		{ x: -1, y: -1 },
+		{ x: 0, y: 1 },
+		{ x: 1, y: -1 },
+	]]
+]);
 
-let grid = { enabled: true, size: 50 }
+let grid = { shown: true, size: 50 }
 
 let mouse = { hover: false, x: 0, y: 0 }
 
@@ -38,7 +44,7 @@ ctx.font = "1em sans-serif";
 	ctx.fillRect(0, 0, cp.clientWidth, cp.clientHeight);
 
 	// grid
-	if (grid.enabled) {
+	if (grid.shown) {
 		{ // background
 			ctx.strokeStyle = "#333"
 			ctx.beginPath();
@@ -81,38 +87,36 @@ ctx.font = "1em sans-serif";
 	}
 
 	// map
-	objects.forEach((points) => {
-		for (let i = 0; i < points.length; i++) {
-			let point1 = points[i];
-
-			for (let j = 0; j < points.length; j++) {
-				let point2 = points[j];
-
-				if (point1 == point2) continue;
-
-				let d = distanceTo(point1, point2);
-
-				if (255 - d <= 0) continue;
-
-				ctx.strokeStyle = `rgba(255, 255, 255, ${(255 - d) / 255})`;
-				ctx.beginPath();
-				ctx.moveTo(point1.x, point1.y);
-				ctx.lineTo(point2.x, point2.y);
-				ctx.stroke();
-			}
-		}
-	});
-
 	ctx.fillStyle = "#fff";
 	objects.forEach((points) => {
 		for (let i = 0; i < points.length; i++) {
 			let point = points[i];
 
+			let x = cp.clientWidth / 2 + point.x * grid.size;
+			let y = cp.clientHeight / 2 - point.y * grid.size;
+
 			ctx.beginPath();
-			ctx.ellipse(point.x, point.y, 10, 10, 0, 0, Math.PI * 2);
+			ctx.ellipse(x, y, 10, 10, 0, 0, Math.PI * 2);
 			ctx.fill();
 		}
 	});
+
+	// cursor
+	if (mouse.hover) {
+		let x = Math.round(mouse.x / grid.size) * grid.size;
+		let y = Math.round(mouse.y / grid.size) * grid.size;
+
+		let offsetx = (cp.clientWidth / 2) % grid.size;
+		let offsety = (cp.clientHeight / 2) % grid.size;
+
+		ctx.beginPath();
+		ctx.ellipse(x + offsetx, y + offsety, 10, 10, 0, 0, Math.PI * 2);
+		ctx.fill();
+
+		ctx.fillText(`(${Math.round((x - cp.clientWidth / 2) / grid.size)}, ` +
+					  `${Math.round((cp.clientHeight / 2 - y) / grid.size)})`,
+					  x + offsetx + 8, y + offsety - 16);
+	}
 })();
 
 // mouse controls
