@@ -109,6 +109,38 @@ canvas {
 	background: rgba(255, 255, 255, 0.05);
 }
 
+/* properties */
+
+.properties .field {
+	padding: 0.75em;
+	border-bottom: 1px solid #333;
+	display: flex;
+	align-items: center;
+}
+
+.properties .field:last-child {
+	border-bottom: none;
+}
+
+.properties .field .label {
+	margin-right: 0.5em;
+	cursor: default;
+	-webkit-user-select: none;
+	        user-select: none;
+}
+
+.properties .field .input {
+	min-width: 0;
+	padding: 0.5em;
+	background: #1c1c1c;
+	color: #ddd;
+	border: none;
+	flex: 1;
+	-webkit-appearance: none;
+	   -moz-appearance: none;
+	        appearance: none;
+}
+
 /* layout */
 
 .wrapper {
