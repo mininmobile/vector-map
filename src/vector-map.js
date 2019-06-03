@@ -1,36 +1,4 @@
-let paths = [
-	{
-		name: "Triangle",
-		distance: 5,
-		points: [
-			{ x: -1, y: -1 },
-			{ x: 0, y: 1 },
-			{ x: 1, y: -1 },
-		]
-	},
-	{
-		name: "Square",
-		distance: 5,
-		points: [
-			{ x: 3, y: 3 },
-			{ x: 6, y: 3 },
-			{ x: 6, y: 6 },
-			{ x: 3, y: 6 },
-		]
-	},
-	{
-		name: "Polygon",
-		distance: 2,
-		points: [
-			{ x: -3, y: -4 },
-			{ x: -4, y: -3 },
-			{ x: -5, y: -4 },
-			{ x: -5, y: -5 },
-			{ x: -3, y: -5 },
-			{ x: -4, y: -6 },
-		]
-	},
-]
+let paths = []
 
 let grid = { shown: true, size: 50 }
 
@@ -197,8 +165,29 @@ ctx.font = "1em sans-serif";
 
 	function generateList() {
 		list.innerHTML = "";
+		
+		{ // thing
+			let container = document.createElement("div");
+				container.classList.add("container");
+				list.appendChild(container);
 
-		paths.forEach((path) => {
+			let thing = document.createElement("div");
+				thing.innerText = "Create Path";
+				thing.classList.add("thing");
+				thing.addEventListener("click", () => {
+					paths.push({
+						name: "New Path",
+						distance: 5,
+						points: [],
+					});
+
+					generateList();
+				});
+				container.appendChild(thing);
+		}
+
+		// paths list
+		paths.forEach((path, i) => {
 			let container = document.createElement("div");
 				container.classList.add("container");
 				list.appendChild(container);
@@ -207,19 +196,19 @@ ctx.font = "1em sans-serif";
 				name.innerText = path.name;
 				name.classList.add("name");
 				name.addEventListener("click", () => {
-					if (selected.type == 0 && selected.index == path.name) {
+					if (selected.type == 0 && selected.index == i) {
 						selected.type = -1;
 						selected.index = undefined;
 					} else {
 						selected.type = 0;
-						selected.index = path.name;
+						selected.index = i;
 					}
 
 					generateList();
 				});
 				container.appendChild(name);
 
-			if (selected.type == 0 && selected.index == path.name) {
+			if (selected.type == 0 && selected.index == i) {
 				name.classList.add("selected");
 			}
 
@@ -241,7 +230,7 @@ ctx.font = "1em sans-serif";
 c.addEventListener("click", (e) => {
 	if (e.button == 0) {
 		if (selected.type == 0) {
-			let path = paths.filter(x => x.name == selected.index)[0];
+			let path = paths[selected.index];
 
 			if (path) {
 				let x = Math.round(mouse.x / grid.size) * grid.size;

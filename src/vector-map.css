@@ -48,6 +48,13 @@ canvas {
 	border-bottom: none;
 }
 
+.list .container .thing {
+	margin: 0.5em;
+	margin-right: 0;
+	padding: 0.5em;
+	transition: background 0.2s;
+}
+
 .list .container .name {
 	margin-left: 0.5em;
 	margin-top: 0.5em;
@@ -68,6 +75,7 @@ canvas {
 
 .list .container .name:hover,
 .list .container .point:hover,
+.list .container .thing:hover,
 .list .container .selected {
 	background: rgba(255, 255, 255, 0.05);
 }
