@@ -158,9 +158,14 @@ ctx.font = "1em sans-serif";
 })();
 
 // ui
-{ // list
+{ // lists
 	{ // init
+		generateLists();
+	}
+
+	function generateLists() {
 		generateList();
+		generateProp();
 	}
 
 	function generateList() {
@@ -181,7 +186,7 @@ ctx.font = "1em sans-serif";
 						points: [],
 					});
 
-					generateList();
+					generateLists();
 				});
 				container.appendChild(thing);
 		}
@@ -204,7 +209,7 @@ ctx.font = "1em sans-serif";
 						selected.index = i;
 					}
 
-					generateList();
+					generateLists();
 				});
 				container.appendChild(name);
 
@@ -223,6 +228,54 @@ ctx.font = "1em sans-serif";
 					pointContainer.appendChild(pointElement);
 			});
 		});
+	}
+
+	function generateProp() {
+		prop.innerHTML = "";
+
+		switch (selected.type) {
+			case 0: {
+				let path = paths[selected.index];
+
+				{ // name field
+					let field = document.createElement("div");
+						field.classList.add("field");
+						prop.appendChild(field);
+
+					let label = document.createElement("div");
+						label.innerText = "Name";
+						label.classList.add("label");
+						field.appendChild(label);
+
+					let input = document.createElement("input");
+						input.value = path.name;
+						input.type = "text";
+						input.classList.add("input");
+						field.appendChild(input);
+				}
+
+				{ // distance field
+					let field = document.createElement("div");
+						field.classList.add("field");
+						prop.appendChild(field);
+
+					let label = document.createElement("div");
+						label.innerText = "Distance";
+						label.classList.add("label");
+						field.appendChild(label);
+
+					let input = document.createElement("input");
+						input.value = path.distance;
+						input.type = "text";
+						input.classList.add("input");
+						field.appendChild(input);
+				}
+			} break;
+
+			case 1: {
+
+			} break;
+		}
 	}
 }
 
