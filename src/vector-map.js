@@ -251,6 +251,11 @@ ctx.font = "1em sans-serif";
 						input.value = path.name;
 						input.type = "text";
 						input.classList.add("input");
+						input.addEventListener("change", () => {
+							path.name = input.value;
+
+							generateLists();
+						});
 						field.appendChild(input);
 				}
 
@@ -268,6 +273,14 @@ ctx.font = "1em sans-serif";
 						input.value = path.distance;
 						input.type = "text";
 						input.classList.add("input");
+						input.addEventListener("change", () => {
+							let i = parseInt(input.value);
+							
+							if (!isNaN(i))
+								path.distance = i;
+
+							generateLists();
+						});
 						field.appendChild(input);
 				}
 			} break;
