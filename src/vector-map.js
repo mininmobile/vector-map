@@ -152,7 +152,7 @@ ctx.font = "1em sans-serif";
 		ctx.fill();
 
 		ctx.fillText(`(${Math.round((x - cp.clientWidth / 2) / grid.size) + 1}, ` +
-					  `${Math.round((cp.clientHeight / 2 - y) / grid.size)})`,
+					  `${Math.round((cp.clientHeight / 2 - y) / grid.size) - 1})`,
 					  x + offsetx + 8, y + offsety - 16);
 	}
 })();
@@ -238,7 +238,7 @@ c.addEventListener("click", (e) => {
 
 				path.points.push({
 					x: Math.round((x - cp.clientWidth / 2) / grid.size) + 1,
-					y: Math.round((cp.clientHeight / 2 - y) / grid.size),
+					y: Math.round((cp.clientHeight / 2 - y) / grid.size) - 1,
 				});
 
 				generateList();

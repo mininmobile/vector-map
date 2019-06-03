@@ -16,6 +16,35 @@ canvas {
 	cursor: none;
 }
 
+/* context */
+
+.context {
+	background: #2a2a2a;
+	position: absolute;
+	z-index: 999;
+	font-size: 1.1em;
+	cursor: default;
+	-webkit-user-select: none;
+	        user-select: none;
+}
+
+.context .item {
+	padding: 0.25em 0.5em;
+	padding-right: 5em;
+	margin: 0.25em 0;
+	transition: background 0.2s;
+}
+
+.context .item:hover {
+	background: rgba(255, 255, 255, 0.05);
+}
+
+.context .divider {
+	height: 1px;
+	margin: 0.25em 0;
+	background: #555;
+}
+
 /* menubar */
 
 .menu {
