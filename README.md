@@ -1,2 +1,2 @@
 # vector-map
-I think this will look cool.
+moved to https://codeberg.org/zvava/vector-map
